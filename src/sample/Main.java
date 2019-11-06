@@ -18,10 +18,12 @@ public class Main extends Application {
 
 
     public static void main(String[] args) {
-        launch(args);
+        //launch(args);
     Cryptage obj =new Cryptage();
 
-   System.out.println( obj.CeaserCryptageTeacher("Nadir is a chbab ",true,2));
+   System.out.println( obj.CeaserCryptageTeacher("ABCDEFGHIJKLMNOPQRSTUVWXYZ",1,23));
+
+
     }
 }
 

@@ -24,111 +24,243 @@ public class Cryptage {
 
 
 
-      ///Ceaser Cryptage first method 1
-
-    public  String encrypt(String text, int round)
-    {
-        if(round>26)
-        {
-            round=round%26;
-        }
-        else
-             if(round<0)
-             {
-                 round=(round%26)+26;
-             }
-             int length=text.length();
-             for (int i=0;i<length;i++)
-             {
-                 char ch=text.charAt(i);//get the character from the string variable in the position i
-                 //cheacking if the ch is a letter
-                 if(Character.isLetter(ch))
-                 {
-                    //checking if the character is a lower case or Upper Case
-                     if(Character.isUpperCase(ch))
-                     {
-                         char c=(char)(ch+round);
-                         //checking if the value of c is not any symbol should be a character
-                         if(c>'Z' )
-                         {
-                             cryptedSendWorld+=(char)(ch-(26-round));
-                         }
-                         else
-                         {
-                             cryptedSendWorld+=c;
-                         }
-                       }
-                     else
-                         if(Character.isLowerCase(ch))
-                         {
-                            char c=(char)(ch+round);
-                            //checking if the value of c is not any symbols should be a character
-                            if(c>'z' )
-                            {
-                                cryptedSendWorld+=(char)(ch-(26-round));
-                            }
-                            else
-                            {
-                                cryptedSendWorld+=c;
-                            }
-                         }
-                 }
-                 cryptedSendWorld+=ch;
-             }
-             return  cryptedSendWorld;
-    }
-
-
-        public String decrypt()
-    {
-        return "";
-    }
 
     //// Miror Mehtod
 
 /////  Ceaser teacher Method
 
 
-public String CeaserCryptageTeacher(String text, boolean type,int shiftNumber)
+
+
+// cryptage ceaser  use this function to call it in the button cryptag
+public String CeaserCryptageTeacher(String text, int  type,int shiftNumber)
 {
-    char x;
    String  test =text;
   String [] parts=test.split(" ");
   String []textParts= new String[parts.length];
-    for(int i=0;i<textParts.length;i++)
+    if(shiftNumber-25>25)
     {
-        textParts[i]=parts [i];
+        shiftNumber=shiftNumber-25;
     }
+    if(shiftNumber%25==0)
+    {
+        // darthalak hna error bal3ani bch tfham discord ngssro 3liuha
 
-    for(int i=0; i<textParts.length;i++)
-    {
-        textParts[i]=cryptageleft(textParts[i],shiftNumber);
     }
-    for (int i=0;i<textParts.length;i++)
-    {
-        cryptedSendWorld+=textParts[i];
-        cryptedSendWorld+=" ";
-    }
+// chose left or right
+  switch (type)
+  {
+      case 0:
+      {
+          for(int i=0;i<textParts.length;i++)
+          {
+              textParts[i]=parts [i];
+          }
+
+          for(int i=0; i<textParts.length;i++)
+          {
+              textParts[i]=cryptageleft(textParts[i],shiftNumber);
+          }
+          for (int i=0;i<textParts.length;i++)
+          {
+              cryptedSendWorld+=textParts[i];
+              cryptedSendWorld+=" ";
+          }
+          break;
+      }
+      case 1:
+      {
+          for(int i=0;i<textParts.length;i++)
+          {
+              textParts[i]=parts [i];
+          }
+
+          for(int i=0; i<textParts.length;i++)
+          {
+              textParts[i]=cryptageRight(textParts[i],shiftNumber);
+          }
+          for (int i=0;i<textParts.length;i++)
+          {
+              cryptedSendWorld+=textParts[i];
+              cryptedSendWorld+=" ";
+          }
+          break;
+      }
+  }
+
     return  cryptedSendWorld;
 }
 
+
+
+
+
+
+// left cipher
 private  String cryptageleft(String text , int n )
 {
+    char [] alphabetL={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+    char [] alphabetU = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
     char x;
-    String test =text;
+    int t=0;
     String returnString="";
-    for(int i=0;i< n;i++)
+
+
+
+    for(int i=0;i<text.length();i++)
     {
-        returnString="";
-        x=test.charAt(0);
-        for (int j=0;j<test.length()-1;j++)
+        x=text.charAt(i);
+
+        if(Character.isAlphabetic(x)) // checking if the word is an alphabet
         {
-            returnString+=test.charAt(j+1);
+            if(Character.isLowerCase(x))  // checking if a lower case
+            {
+
+                for(int j =0;j<alphabetL.length;j++)
+                {
+                    if(x==alphabetL[j])
+                    {
+                        t=j; /// getting the position of the character
+                        break;
+                    }
+                }
+                if(t-n<0) // checking if the cipher code is a negative
+                {
+                    if( Math.abs(t-n)==1)
+                    {
+                      t=25;
+                    }
+                    else if(Math.abs(t-n)>1)
+                    {
+                        int u=n-t;
+                        t=25-u;
+                    }
+                    returnString+=alphabetL[t];
+                }
+                else
+                { returnString+=alphabetL[t-n]; }
+
+            }
+
+
+            if(Character.isUpperCase(x)) // for upper Case
+            {
+
+                for(int j =0;j<alphabetU.length;j++)
+                {
+                    if(x==alphabetU[j])
+                    {
+                        t=j;
+                        break;
+                    }
+                }
+                if(t-n<0)
+                {
+                    if( Math.abs(t-n)==1)
+                    { t=26; }
+                    else if(Math.abs(t-n)>1)
+                    { t=26-Math.abs(t-n)-1; }
+                    returnString+=alphabetU[t];
+                }
+                else
+                { returnString+=alphabetL[t-n]; }
+            }
         }
-        returnString+=x;
-        test=returnString;
+        else
+        { returnString+=x; }
+
     }
     return  returnString;
 }
 
+
+
+
+    private  String cryptageRight(String text , int n )
+    {
+        char [] alphabetL={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+        char [] alphabetU = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+        char x;
+        int t=0;
+        String returnString="";
+
+        for(int i=0;i<text.length();i++)
+        {
+            x=text.charAt(i);
+
+            if(Character.isAlphabetic(x))
+            {
+                if(Character.isLowerCase(x))
+                {
+
+                    for(int j =0;j<alphabetL.length;j++)
+                    {
+                        if(x==alphabetL[j])
+                        {
+                            t=j;
+                            break;
+                        }
+                    }
+                    if(t+n>25)
+                    {
+                        int c =t+n;
+                        if( c-25==1)
+                        {
+                            t=0;
+                        }
+                        else if(c-25>1)
+                        {
+                            int u=c-25;
+                            t=0+u;
+                        }
+                        returnString+=alphabetL[t];
+                    }
+                    else
+                    {
+                        returnString+=alphabetL[t+n];
+                    }
+
+                }
+                else
+                if(Character.isUpperCase(x))
+                {
+
+                    for(int j =0;j<alphabetU.length;j++)
+                    {
+                        if(x==alphabetU[j])
+                        {
+                            t=j;
+                            break;
+                        }
+                    }
+                    if(t+n>25)
+                    {
+                        int c =t+n;
+                        if( c-25==1)
+                        {
+                            t=0;
+                        }
+                        else if(c-25>1)
+                        {
+                            int u=c-25;
+                            t=0+u;
+                        }
+                        returnString+=alphabetU[t];
+                    }
+                    else
+                    {
+                        returnString+=alphabetU[t+n];
+                    }
+                }
+
+
+            }
+            else
+            {
+                returnString+=x;
+            }
+
+        }
+        return  returnString;
+    }
 }
